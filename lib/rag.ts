@@ -1,15 +1,5 @@
-import { Memory, Chunk } from "./types";
-import { llm } from "./llm";
-
-const EMBED_MODEL = process.env.EMBED_MODEL || "text-embedding-3-small";
-
-export async function embed(texts: string[]): Promise<number[][]> {
-  if (texts.length === 0) return [];
-  const r = await llm().embeddings.create({ model: EMBED_MODEL, input: texts });
-  return r.data
-    .sort((a, b) => a.index - b.index)
-    .map((d) => d.embedding);
-}
+import { Memory } from "./types";
+import { embed, chat } from "./llm";
 
 export function chunkText(text: string, size = 1200, overlap = 200): string[] {
   const paras = text.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
